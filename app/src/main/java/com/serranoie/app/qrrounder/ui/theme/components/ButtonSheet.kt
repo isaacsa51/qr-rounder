@@ -1,4 +1,4 @@
-package com.serranoie.app.qrrounder
+package com.serranoie.app.qrrounder.ui.theme.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

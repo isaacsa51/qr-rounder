@@ -13,6 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.navigation.compose.rememberNavController
+import com.serranoie.app.qrrounder.navigation.QrRounderNavHost
+import com.serranoie.app.qrrounder.ui.home.HomeScreen
+import com.serranoie.app.qrrounder.ui.qr.QRCodeScannerWithBottomSheet
 import com.serranoie.app.qrrounder.ui.theme.QRRounderTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +31,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             enableEdgeToEdge(
                 statusBarStyle =
                     SystemBarStyle.auto(
@@ -42,19 +45,9 @@ class MainActivity : ComponentActivity() {
             )
 
             QRRounderTheme {
-                var showScanner by remember { mutableStateOf(false) }
+                val navController = rememberNavController()
                 
-                if (showScanner) {
-                    // Request camera permission when switching to scanner
-                    requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
-                    QRCodeScannerWithBottomSheet(
-                        onBackPressed = { showScanner = false }
-                    )
-                } else {
-                    HomeScreen(
-                        onScanClicked = { showScanner = true }
-                    )
-                }
+                QrRounderNavHost(navController)
             }
         }
     }

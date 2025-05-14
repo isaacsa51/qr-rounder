@@ -1,4 +1,4 @@
-package com.serranoie.app.qrrounder
+package com.serranoie.app.qrrounder.ui.qr
 
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis

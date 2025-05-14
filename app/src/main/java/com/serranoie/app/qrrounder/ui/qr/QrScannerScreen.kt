@@ -1,4 +1,4 @@
-package com.serranoie.app.qrrounder
+package com.serranoie.app.qrrounder.ui.qr
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -32,7 +32,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
@@ -42,6 +41,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,18 +61,22 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.serranoie.app.qrrounder.ui.theme.components.BottomSheetContent
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QRCodeScannerWithBottomSheet(
+    viewModel: ScannerViewModel = viewModel(),
     onBackPressed: () -> Unit = {}
 ) {
+    val scannedCode by viewModel.scannedCode.collectAsState()
+
     val context = LocalContext.current
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
     var tapCoordinates by remember { mutableStateOf<Offset?>(null) }
-    var scannedCode by remember { mutableStateOf<String?>(null) }
     var showSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -91,7 +95,7 @@ fun QRCodeScannerWithBottomSheet(
             sheetState = sheetState,
             onDismiss = {
                 showSheet = false
-                scannedCode = null
+                viewModel.clearScannedCode()
             },
             onCopy = {
                 clipboardManager.setPrimaryClip(ClipData.newPlainText("QR Code", scannedCode))
@@ -134,7 +138,7 @@ fun QRCodeScannerWithBottomSheet(
             CameraPreview(
                 onQrCodeScanned = { code ->
                     if (!showSheet) {
-                        scannedCode = code
+                        viewModel.onQrCodeScanned(code)
                         showSheet = true
                     }
                 },
