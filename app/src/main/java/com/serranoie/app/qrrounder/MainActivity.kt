@@ -3,6 +3,7 @@ package com.serranoie.app.qrrounder
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,6 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.serranoie.app.qrrounder.ui.theme.QRRounderTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +28,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            enableEdgeToEdge()
+            enableEdgeToEdge(
+                statusBarStyle =
+                    SystemBarStyle.auto(
+                        Color.Transparent.toArgb(),
+                        Color.Transparent.toArgb(),
+                    ),
+                navigationBarStyle =
+                    SystemBarStyle.auto(
+                        Color.Transparent.toArgb(),
+                        Color.Transparent.toArgb(),
+                    ),
+            )
 
             QRRounderTheme {
                 var showScanner by remember { mutableStateOf(false) }

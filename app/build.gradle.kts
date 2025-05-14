@@ -64,7 +64,11 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.accompanist.permissions)
 
+    implementation(libs.material3)
+
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
 
     implementation("com.google.zxing:core:3.5.1")
+
+    implementation("androidx.compose.material:material-icons-extended-android:1.6.8")
 }

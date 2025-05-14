@@ -69,10 +69,8 @@ fun QRCodeScannerWithBottomSheet(
     onBackPressed: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-    // State management
     var tapCoordinates by remember { mutableStateOf<Offset?>(null) }
     var scannedCode by remember { mutableStateOf<String?>(null) }
     var showSheet by remember { mutableStateOf(false) }
@@ -112,18 +110,19 @@ fun QRCodeScannerWithBottomSheet(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Scan QR Code") },
+                title = { },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.run {
-                    topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                }
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
+                )
             )
         }
     ) { paddingValues ->
@@ -132,7 +131,6 @@ fun QRCodeScannerWithBottomSheet(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Camera preview
             CameraPreview(
                 onQrCodeScanned = { code ->
                     if (!showSheet) {
@@ -145,10 +143,8 @@ fun QRCodeScannerWithBottomSheet(
                 }
             )
 
-            // QR code scanning guide overlay
             QrCodeScanGuide()
 
-            // Focus indicator overlay
             FocusIndicator(
                 tapCoordinates = tapCoordinates,
                 showIndicator = tapCoordinates != null
